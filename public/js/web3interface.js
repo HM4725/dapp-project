@@ -4,19 +4,395 @@ let user;
 const mEthPrice = 1600;
 const currentYear = 2022;
 
-const abi = []; // 대괄호까지 지우고 abi 복사 붙여넣기
+const abi = [
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "roomId",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "rentId",
+				"type": "uint256"
+			}
+		],
+		"name": "NewRent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "roomId",
+				"type": "uint256"
+			}
+		],
+		"name": "NewRoom",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "getMyRents",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "checkInDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "checkOutDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "renter",
+						"type": "address"
+					}
+				],
+				"internalType": "struct IRoomShare.Rent[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_roomId",
+				"type": "uint256"
+			}
+		],
+		"name": "getRoomRentHistory",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "checkInDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "checkOutDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "renter",
+						"type": "address"
+					}
+				],
+				"internalType": "struct IRoomShare.Rent[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_roomId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "checkInDate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "checkOutDate",
+				"type": "uint256"
+			}
+		],
+		"name": "recommendDate",
+		"outputs": [
+			{
+				"internalType": "uint256[2]",
+				"name": "",
+				"type": "uint256[2]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "rentId",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_roomId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "checkInDate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "checkOutDate",
+				"type": "uint256"
+			}
+		],
+		"name": "rentRoom",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "renter2rent",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "rId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "checkInDate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "checkOutDate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "renter",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "roomId",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "roomId2rent",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "rId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "checkInDate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "checkOutDate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "renter",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "roomId2room",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "location",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "isActive",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "location",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			}
+		],
+		"name": "shareRoom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]; // 대괄호까지 지우고 abi 복사 붙여넣기
 
-const contract_address = ""; // 따옴표 안에 주소값 복사 붙여넣기
+const contract_address = "0x304a1e2704BB4111954126be1004fc4744e62a0f"; // 따옴표 안에 주소값 복사 붙여넣기
 
 const logIn = async () => {
   const ID = prompt("choose your ID");
-
   // 개발 시 (ganache)
-  web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+  // web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
   // 과제 제출 시 (metamask)
-  // web3 = await metamaskRequest();
-
+  web3 = await metamaskRequest();
+  
   user = await getAccountInfos(Number(ID));
 
   await _updateUserAddress(user);
@@ -34,7 +410,7 @@ const metamaskRequest = async () => {
       // Request account access if needed
       await web3.eth.requestAccounts()
       // Acccounts now exposed
-      if(await web3.eth.net.getId() !== 11155111) alert("change to Sepolia test network")
+      if (await web3.eth.net.getId() !== 11155111) alert("change to Sepolia test network")
     } catch (error) {
       // User denied account access...
       alert("Access Denied")
@@ -44,7 +420,7 @@ const metamaskRequest = async () => {
 }
 
 const getAccountInfos = async (id) => {
-  const account = await web3.eth.getAccounts().catch(e=> {
+  const account = await web3.eth.getAccounts().catch(e => {
     console.log('getAccountError: ', e);
   });
   console.log(account);
@@ -52,7 +428,7 @@ const getAccountInfos = async (id) => {
 }
 
 const getBalance = async (address) => {
-  const balance = await web3.eth.getBalance(address).catch(e=> {
+  const balance = await web3.eth.getBalance(address).catch(e => {
     console.log('getBalanceError: ', e);
   });
   console.log(balance);
@@ -80,7 +456,7 @@ const _updateRents = () => {
 let RoomShare;
 
 const getRoomShareContract = () => {
-  RoomShare = new web3.eth.Contract(abi,contract_address)
+  RoomShare = new web3.eth.Contract(abi, contract_address);
   return RoomShare
 }
 
@@ -98,27 +474,27 @@ document.addEventListener("DOMContentLoaded", () => {
   mEth2krwdom = document.getElementById('mEth2krw');
   pricedom = document.getElementById('price');
 
-  checkInDatedom.addEventListener("input",()=>{
+  checkInDatedom.addEventListener("input", () => {
     const datevalformatted = checkInDatedom.value.replace(/(\d{4})(\d{2})(\d{2})|(\d{4})-(\d{2})(\d{2})/, "$1$4-$2$5-$3$6");
     checkInDatedom.value = datevalformatted;
   });
 
-  checkOutDatedom.addEventListener("input",()=>{
+  checkOutDatedom.addEventListener("input", () => {
     const datevalformatted = checkOutDatedom.value.replace(/(\d{4})(\d{2})(\d{2})|(\d{4})-(\d{2})(\d{2})/, "$1$4-$2$5-$3$6");
     checkOutDatedom.value = datevalformatted;
 
     const checkInDate = getDayOfYear(checkInDatedom.value);
-    const checkOutDate = getDayOfYear(datevalformatted); 
+    const checkOutDate = getDayOfYear(datevalformatted);
 
-    updateTotalPrice(checkInDate,checkOutDate);
+    updateTotalPrice(checkInDate, checkOutDate);
   });
 
-  pricedom.addEventListener("input",()=>{
+  pricedom.addEventListener("input", () => {
     const methval = pricedom.value;
     mEth2krwdom.innerText = `${methval * mEthPrice} KRW`;
   });
 
-	roomsSelect = document.getElementById("rooms-select");
+  roomsSelect = document.getElementById("rooms-select");
   roomsSelect.addEventListener('change', displayRoomHistory);
 });
 
@@ -131,7 +507,7 @@ const getDayOfYear = (date) => {
   return day
 }
 
-function dateFromDay(year, day){
+function dateFromDay(year, day) {
   var date = new Date(String(year), 0); // initialize a date in `year-01-01`
   return new Date(date.setDate(day)); // add the number of days
 }
@@ -143,11 +519,9 @@ const shareRoom = async () => {
   const price = shareRoomForm.elements.price.value;
 
   await _shareRoom(name, location, price);
-
   await _updateUserBalance(user);
   _updateRooms();
 }
-
 
 const _shareRoom = async (name, location, price) => {
   // RoomShareContract의 shareRoom 함수를 호출한다.
@@ -155,104 +529,129 @@ const _shareRoom = async (name, location, price) => {
   // 에러 발생시 call 또는 send 함수의 파라미터에 from, gas 필드 값을 제대로 넣었는지 확인한다. (e.g. {from: ..., gas: 3000000, ...})
   // 트랜잭션이 올바르게 발생하면 알림 팝업을 띄운다. (e.g. alert("등록"))
   // 화면을 업데이트 한다.
+  try {
+    const contract = await getRoomShareContract();
+    await contract.methods.shareRoom(name, location, price).send({ from: user, gas: 3000000 });
+    alert("등록");
+  } catch (e) {
+    console.error(e);
+  }
 }
-
 
 const _getMyRents = async () => {
   // 내가 대여한 방 리스트를 불러온다.
+  let myRents = [];
+  try {
+    const contract = await getRoomShareContract();
+    myRents = await contract.methods.getMyRents().call({ from: user });
+  } catch (e) {
+    console.error(e);
+  }
   return myRents;
 }
-
 
 const displayMyRents = async () => {
   const myRents = await _getMyRents();
   let html = "";
-  for(let i = 0; i < myRents.length; ++i) {
-		html += "<tr>";
-			html += "<td>" + myRents[i].id + "</td>"
-			html += "<td>" + myRents[i].rId + "</td>"
-			html += "<td>" + dateFromDay(currentYear,myRents[i].checkInDate).toDateString() + "</td>"
-			html += "<td>" + dateFromDay(currentYear,myRents[i].checkOutDate).toDateString() + "</td>"
-		html += "</tr>";
-	}
-	document.getElementById('myRents').innerHTML = html;
+  for (let i = 0; i < myRents.length; ++i) {
+    html += "<tr>";
+    html += "<td>" + myRents[i].id + "</td>"
+    html += "<td>" + myRents[i].rId + "</td>"
+    html += "<td>" + dateFromDay(currentYear, myRents[i].checkInDate).toDateString() + "</td>"
+    html += "<td>" + dateFromDay(currentYear, myRents[i].checkOutDate).toDateString() + "</td>"
+    html += "</tr>";
+  }
+  document.getElementById('myRents').innerHTML = html;
 }
 
 const _getAllRooms = async () => {
   // Room ID 를 기준으로 컨트랙트에 등록된 모든 방 객체의 데이터를 불러온다.
+  const rooms = [];
+  try {
+    const contract = await getRoomShareContract();
+    const nRooms = await contract.methods.roomId().call({ from: user });
+    for (let i = 0; i < nRooms; i++) {
+      const room = await contract.methods.roomId2room(i).call({ from: user });
+      rooms.push(room);
+    }
+  } catch (e) {
+    console.error(e);
+  }
   return rooms;
 }
 
 const displayAllRooms = async () => {
   const allRooms = await _getAllRooms();
-	let html = "";
-	for(let i = 0; i < allRooms.length; ++i) {
-		html += "<tr>";
-      html += "<td>" + allRooms[i].id + "</td>"
-      html += "<td>" + allRooms[i].name + "</td>"
-      html += "<td>" + allRooms[i].location + "</td>"
-      html += "<td>" + allRooms[i].isActive + "</td>"
-      html += "<td>" + allRooms[i].price + "</td>"
-      html += "<td>" + allRooms[i].owner.slice(0,7)+"..." + "</td>"
-		html += "</tr>";
-	}
-	document.getElementById('allRooms').innerHTML = html;
+  let html = "";
+  for (let i = 0; i < allRooms.length; ++i) {
+    html += "<tr>";
+    html += "<td>" + allRooms[i].id + "</td>"
+    html += "<td>" + allRooms[i].name + "</td>"
+    html += "<td>" + allRooms[i].location + "</td>"
+    html += "<td>" + allRooms[i].isActive + "</td>"
+    html += "<td>" + allRooms[i].price + "</td>"
+    html += "<td>" + allRooms[i].owner.slice(0, 7) + "..." + "</td>"
+    html += "</tr>";
+  }
+  document.getElementById('allRooms').innerHTML = html;
 }
 
 const listAllRooms = async () => {
-	const allRooms = await _getAllRooms();
-	let html = "<option value=''>- Rooms Available -</option>";
-	for(let i = 0; i < allRooms.length; ++i) {
-    if(allRooms[i].isActive == false)
-			continue;
-    const jsonstr = JSON.stringify(allRooms[i]).replace(" ","+");
-		html += `<option value=${jsonstr}>`;
-			html += allRooms[i].id + " | "
-			html += allRooms[i].name + " | "
-			html += allRooms[i].location.replace("+"," ") + " | "
-			html += allRooms[i].isActive + " | "
-			html += allRooms[i].price + " | "
-			html += allRooms[i].owner.slice(0,17)+"..."
-		html += "</option>";
-	}
+  const allRooms = await _getAllRooms();
+  let html = "<option value=''>- Rooms Available -</option>";
+  for (let i = 0; i < allRooms.length; ++i) {
+    if (allRooms[i].isActive == false)
+      continue;
+    const jsonstr = JSON.stringify(allRooms[i]).replaceAll(" ", "+");
+    html += `<option value=${jsonstr}>`;
+    html += allRooms[i].id + " | "
+    html += allRooms[i].name + " | "
+    html += allRooms[i].location.replaceAll("+", " ") + " | "
+    html += allRooms[i].isActive + " | "
+    html += allRooms[i].price + " | "
+    html += allRooms[i].owner.slice(0, 17) + "..."
+    html += "</option>";
+  }
   roomsSelect.innerHTML = html;
 }
 
 const returnOptionsJSON = () => {
-  const obj = roomsSelect.options[roomsSelect.selectedIndex].value;
-  if(obj) {
-    const jsonobj = JSON.parse(obj);
+  const obj = roomsSelect.options[roomsSelect.selectedIndex];
+  if (obj && obj.value) {
+    const jsonobj = JSON.parse(obj.value.replaceAll("+", " "));
     return jsonobj;
+  }
+  return null;
+}
+
+const calculatePrice = (checkInDate, checkOutDate) => {
+  try {
+    const jsonobj = returnOptionsJSON();
+    const price = Number(jsonobj.price);
+    const _price = (checkOutDate - checkInDate) * price;
+    return _price;
+  } catch (e) {
+    return NaN;
   }
 }
 
-const calculatePrice = (checkInDate,checkOutDate) => {
-  const jsonobj = returnOptionsJSON();
-  const price = Number(jsonobj.price);
-  const _price = (checkOutDate-checkInDate)*price;
-  return _price;
-}
-
-const updateTotalPrice = (checkInDate,checkOutDate) => {
-  const _price = calculatePrice(checkInDate,checkOutDate);
+const updateTotalPrice = (checkInDate, checkOutDate) => {
+  const _price = calculatePrice(checkInDate, checkOutDate);
   const totalfeedom = document.getElementById('totalfee');
   totalfeedom.innerText = `${_price * mEthPrice} KRW`;
 }
 
-
 const rentRoom = async () => {
   const checkInDate = getDayOfYear(checkInDatedom.value);
-  const checkOutDate = getDayOfYear(checkOutDatedom.value); 
+  const checkOutDate = getDayOfYear(checkOutDatedom.value);
 
-  const _price = calculatePrice(checkInDate,checkOutDate);
+  const _price = calculatePrice(checkInDate, checkOutDate);
   const jsonobj = returnOptionsJSON();
   const roomId = jsonobj.id;
 
   await _rentRoom(roomId, checkInDate, checkOutDate, _price);
-
   await _updateUserBalance(user);
   _updateRents();
-
 }
 
 const _rentRoom = async (roomId, checkInDate, checkOutDate, price) => {
@@ -262,6 +661,17 @@ const _rentRoom = async (roomId, checkInDate, checkOutDate, price) => {
   // 단위는 finney = milli Eth (10^15)
   // Room ID에 해당하는 방이 체크인하려는 날짜에 대여되어서 대여되지 않는다면 _recommendDate 함수를 호출한다.
   // 화면을 업데이트 한다.
+  try {
+    const contract = await getRoomShareContract();
+    if(price > 0) {
+      const priceWei = price * Math.pow(10, 15);
+      await contract.methods.rentRoom(roomId, checkInDate, checkOutDate).send({ from: user, gas: 3000000, value: priceWei });
+      alert("대여 완료");
+    }
+  } catch (e) {
+    await _recommendDate(roomId, checkInDate, checkOutDate);
+    console.error(e);
+  }
 }
 
 const _recommendDate = async (roomId, checkInDate, checkOutDate) => {
@@ -269,38 +679,47 @@ const _recommendDate = async (roomId, checkInDate, checkOutDate) => {
   // 기존에 대여된 날짜가 언제부터 언제까지인지 알림 팝업으로 표시한다.
   // checkInDate <= 대여된 체크인 날짜 , 대여된 체크아웃 날짜 < checkOutDate
   // 주어진 헬퍼 함수 dateFromDay 를 이용한다.
+  try {
+    const contract = await getRoomShareContract();
+    const rentedDate = await contract.methods.recommendDate(roomId, checkInDate, checkOutDate).call({ from: user });
+    const sRentedData = [
+      dateFromDay(currentYear, rentedDate[0]).toDateString(),
+      dateFromDay(currentYear, rentedDate[1]).toDateString()
+    ];
+    console.log(rentedDate[0], rentedDate[1]);
+    alert(`기존 대여 날짜: ${sRentedData[0]} ~ ${sRentedData[1]}`);
+  } catch (e) {
+    console.error(e);
+  }
 }
-
 
 const getRoomRentHistory = async () => {
   // 선택된 방에 대해 그동안 대여했던 사람들의 목록(히스토리)을 불러온다.
   // 빈 배열을 만들고 주어진 헬퍼 함수 returnOptionsJSON 를 사용하여 선택된 방의 ID 값을 이용해 컨트랙트를 호출한다.
-  // 헬퍼 함수 dateFromDay 를 이용한다.
-  
-  return history
+  let history = [];
+  try {
+    const jsonobj = returnOptionsJSON();
+    if (jsonobj) {
+      const roomId = jsonobj.id;
+      const contract = await getRoomShareContract();
+      history = await contract.methods.getRoomRentHistory(roomId).call({ from: user });
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  return history;
 }
-
 
 const displayRoomHistory = async () => {
-	const history = await getRoomRentHistory();
-	let html = "";
-	for(let i = 0; i < history.length; ++i) {
-		html += "<tr>";
+  const history = await getRoomRentHistory();
+  let html = "";
+  for (let i = 0; i < history.length; ++i) {
+    html += "<tr>";
     html += "<td>" + history[i].id + "</td>"
-    html += "<td>" + history[i].checkInDate + "</td>"
-    html += "<td>" + history[i].checkOutDate + "</td>"
-    html += "<td>" + history[i].renter.slice(0,12)+"..." + "</td>"
-		html += "</tr>";
-	}
-	document.getElementById('roomHistory').innerHTML = html;
-}
-
-const markRoomAsInactive = async (_roomId) => {
-  // optional 1: 예약 비활성화
-  // 소유한 방 중에서 선택한 방의 대여 가능 여부를 비활성화 한다.
-}
-
-const intializeRoomShare = async (_roomId) => {
-  // optional 2: 대여 초기화
-  // 소유한 방 중에서 선택한 방의 대여된 일정을 모두 초기화 한다.
+    html += "<td>" + dateFromDay(currentYear, history[i].checkInDate).toDateString() + "</td>"
+    html += "<td>" + dateFromDay(currentYear, history[i].checkOutDate).toDateString() + "</td>"
+    html += "<td>" + history[i].renter.slice(0, 12) + "..." + "</td>"
+    html += "</tr>";
+  }
+  document.getElementById('roomHistory').innerHTML = html;
 }

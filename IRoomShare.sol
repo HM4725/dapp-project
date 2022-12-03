@@ -3,57 +3,49 @@ pragma solidity >=0.7.0 <0.9.0;
 
 interface IRoomShare {
     struct Room {
-        uint id;
+        uint256 id;
         string name;
         string location;
         bool isActive;
-        uint price;
+        uint256 price;
         address owner;
         bool[] isRented;
     }
 
     struct Rent {
-        uint id;
-        uint rId;
-        uint checkInDate;
-        uint checkOutDate;
+        uint256 id;
+        uint256 rId;
+        uint256 checkInDate;
+        uint256 checkOutDate;
         address renter;
     }
 
-    event NewRoom (
-        uint256 indexed roomId
-    );
-    event NewRent (
-        uint indexed roomId,
-        uint256 indexed rentId
-    );
-    event Transfer(
-      address sender, 
-      address recipient, 
-      uint amount
-    );
+    event NewRoom(uint256 indexed roomId);
+    event NewRent(uint256 indexed roomId, uint256 indexed rentId);
+    event Transfer(address sender, address recipient, uint256 amount);
 
+    function getMyRents() external view returns (Rent[] memory);
 
-    function getMyRents() external view returns(Rent[] memory); // msg.sender
+    function getRoomRentHistory(uint256 _roomId)
+        external
+        view
+        returns (Rent[] memory);
 
-    function getRoomRentHistory(uint _roomId) external view returns(Rent[] memory);
+    function shareRoom(
+        string calldata name,
+        string calldata location,
+        uint256 price
+    ) external;
 
-    
-    function shareRoom( string calldata name, string calldata location, uint price ) external;
+    function rentRoom(
+        uint256 _roomId,
+        uint256 checkInDate,
+        uint256 checkOutDate
+    ) external payable;
 
-    function rentRoom(uint _roomId, uint checkInDate, uint checkOutDate) payable external;
-        function _createRent(uint256 _roomId, uint256 checkInDate, uint256 checkoutDate) external ; // internal
-        function _sendFunds (address owner, uint256 value) external ; // internal
-
-
-    function recommendDate(uint _roomId, uint checkInDate, uint checkOutDate) external view returns(uint[2] memory);
-    
-
-    // optional 1
-    // caution: 방의 소유자를 먼저 체크해야한다.
-    function markRoomAsInactive(uint256 _roomId) external;
-
-    // optional 2
-    // caution: 변수의 저장공간에 유의한다.
-    function initializeRoomShare(uint _roomId, uint day) external;
+    function recommendDate(
+        uint256 _roomId,
+        uint256 checkInDate,
+        uint256 checkOutDate
+    ) external view returns (uint256[2] memory);
 }
